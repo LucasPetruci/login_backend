@@ -1,0 +1,32 @@
+{
+  "name": "back-login-app",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "ts-node ./src/app.ts",
+    "dev": "ts-node ./src/app.ts --files src/app.ts",
+    "build": "tsc",
+    "serve": "node ./dist/app.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "http-errors": "~1.6.3",
+    "jade": "^1.9.2",
+    "morgan": "~1.9.1",
+    "mssql": "^11.0.1"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/debug": "^4.1.12",
+    "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/mssql": "^9.1.5",
+    "@types/node": "^22.10.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  }
+}
