@@ -1,6 +1,7 @@
 import { connectToDataBase } from "../db/dbConfig";
 import { User } from "../model/userModel";
 import bcrypt from "bcrypt";
+import { generateToken } from "../utils/jwtUtil";
 
 export const findByEmail = async (email: string): Promise<User | null> => {
   const pool = await connectToDataBase();
@@ -48,7 +49,7 @@ export const createUser = async (
 export const findUser = async (
   email: string,
   password: string
-): Promise<User | null> => {
+): Promise<{ user: User; token: string } | null> => {
   const pool = await connectToDataBase();
   try {
     const result = await pool
@@ -65,7 +66,8 @@ export const findUser = async (
     if (!isPasswordValid) {
       return null;
     }
-    return user;
+    const token = generateToken({ id: user.id, email: user.email });
+    return { user, token };
   } catch (error) {
     console.error("Erro ao buscar usuário por email e senha:", error);
     throw error;

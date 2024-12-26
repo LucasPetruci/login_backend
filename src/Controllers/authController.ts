@@ -19,8 +19,13 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
 
   try {
-    const user: User = await authService.login(email, password);
-    res.status(200).json(user);
+    const result = await authService.login(email, password);
+
+    if (!result) {
+      res.status(401).json({ message: "Invalid email or password" });
+    }
+    const { user, token } = result;
+    res.status(200).json({ user, token });
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }

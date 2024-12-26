@@ -15,7 +15,7 @@ export const authenticate = (
 
   try {
     const decoded = verifyToken(token); // Verifica e decodifica o token
-    //req.user = decoded; // Adiciona o payload do token ao objeto req
+    (req as any).user = decoded;
     next(); // Continua para o próximo middleware ou rota
   } catch (error) {
     res.status(401).json({ message: "Invalid token" });
