@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import * as userRepository from "../Repositories/userRepo";
+import { User } from "../model/userModel";
 
 export const register = async (email: string, password: string) => {
   const existingUser = await userRepository.findByEmail(email);
@@ -10,4 +11,11 @@ export const register = async (email: string, password: string) => {
   return await userRepository.createUser(email, encryptedPassword);
 };
 
-export const login = async () => {};
+export const login = async (email: string, password: string) => {
+  const existingUser = await userRepository.findUser(email, password);
+  if (!existingUser) {
+    throw new Error("Usuário ou senha incorretos");
+  }
+
+  return existingUser;
+};
