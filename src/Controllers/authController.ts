@@ -6,6 +6,11 @@ import { User } from "../model/userModel";
 const registerUser = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
 
+  if (!email || !password) {
+    res.status(400).json({ message: "Email and password are required" });
+    return;
+  }
+
   try {
     const user: User = await authService.register(email, password);
     res.status(200).json(user);
@@ -17,6 +22,11 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
 //login
 const loginUser = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
+
+  if (!email || !password) {
+    res.status(400).json({ message: "Email and password are required" });
+    return;
+  }
 
   try {
     const result = await authService.login(email, password);
