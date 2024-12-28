@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import * as userRepository from "../Repositories/userRepo";
+import * as userRepository from "../Repositories/userRepository";
 import { User } from "../model/userModel";
 
 export const register = async (email: string, password: string) => {
