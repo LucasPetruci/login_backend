@@ -1,6 +1,10 @@
 import request from "supertest";
 import app from "../../app";
 import * as authService from "../../services/authService";
+import { User } from "../../model/userModel";
+import { RegisterUserDTO } from "../../dto/registerUserDTO";
+import { LoginResponseDTO } from "../../dto/loginResponseDTO";
+import { LoginUserDTO } from "../../dto/loginUserDTO";
 
 jest.mock("../../services/authService");
 
@@ -10,10 +14,13 @@ describe("Auth Controller", () => {
     //success case
     test("Should register a user successfully", async () => {
       // Arrange
-      const mockUser = { id: 1, email: "test@example.com" };
+      const mockUser: User = { id: 1, email: "test@example.com", password: "" };
       // Mocking the register function
       (authService.register as jest.Mock).mockResolvedValue(mockUser);
-      const payload = { email: "test@example.com", password: "123456" };
+      const payload: RegisterUserDTO = {
+        email: "test@example.com",
+        password: "123456",
+      };
 
       // Act
       const response = await request(app).post("/register").send(payload);
@@ -31,7 +38,7 @@ describe("Auth Controller", () => {
   //failure case
   test("Should return 400 if email or password is missing", async () => {
     // Arrange
-    const payload = { email: "test@example.com" };
+    const payload: Partial<RegisterUserDTO> = { email: "test@example.com" };
 
     // Act
     const response = await request(app).post("/register").send(payload);
@@ -50,7 +57,10 @@ describe("Auth Controller", () => {
     (authService.register as jest.Mock).mockRejectedValue(
       new Error(errorMesssage)
     );
-    const payload = { email: "test@example.com", password: "123456" };
+    const payload: RegisterUserDTO = {
+      email: "test@example.com",
+      password: "123456",
+    };
 
     // Act
     const response = await request(app).post("/register").send(payload);
@@ -65,12 +75,15 @@ describe("POST /login", () => {
   //success case
   test("Should login a user successfully", async () => {
     // Arrange
-    const mockResult = {
+    const mockResult: LoginResponseDTO = {
       user: { id: 1, email: "test@example" },
       token: "mocked_token_jwt",
     };
     (authService.login as jest.Mock).mockResolvedValue(mockResult);
-    const payload = { email: "test@example.com", password: "123456" };
+    const payload: LoginUserDTO = {
+      email: "test@example.com",
+      password: "123456",
+    };
 
     // Act
     const response = await request(app).post("/login").send(payload);
@@ -88,7 +101,10 @@ describe("POST /login", () => {
   test("Should return 401 if invalid email or password", async () => {
     // Arrange
     (authService.login as jest.Mock).mockResolvedValue(null);
-    const payload = { email: "wrong@example.com", password: "wrong_password" };
+    const payload: LoginUserDTO = {
+      email: "wrong@example.com",
+      password: "wrong_password",
+    };
 
     // Act
     const response = await request(app).post("/login").send(payload);
@@ -101,7 +117,7 @@ describe("POST /login", () => {
   //failure case - email or password missing
   test("Should return 400 if email or password is missing", async () => {
     // Arrange
-    const payload = { email: "empty@example.com" };
+    const payload: Partial<LoginUserDTO> = { email: "empty@example.com" };
 
     // Act
     const response = await request(app).post("/login").send(payload);
@@ -118,7 +134,10 @@ describe("POST /login", () => {
     // Arrange
     const errorMessage = "Login failed";
     (authService.login as jest.Mock).mockRejectedValue(new Error(errorMessage));
-    const payload = { email: "test@example.com", password: "123456" };
+    const payload: LoginUserDTO = {
+      email: "test@example.com",
+      password: "123456",
+    };
 
     // Act
     const response = await request(app).post("/login").send(payload);
