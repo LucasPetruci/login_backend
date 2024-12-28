@@ -97,4 +97,33 @@ describe("POST /login", () => {
     expect(response.status).toBe(401);
     expect(response.body).toEqual({ message: "Invalid email or password" });
   });
+
+  //failure case - email or password missing
+  test("Should return 400 if email or password is missing", async () => {
+    // Arrange
+    const payload = { email: "empty@example.com" };
+
+    // Act
+    const response = await request(app).post("/login").send(payload);
+
+    // Assert
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({
+      message: "Email and password are required",
+    });
+  });
+
+  //failure case - error handle
+  test("Should return 400 if an error occurs", async () => {
+    // Arrange
+    const errorMessage = "Login failed";
+    (authService.login as jest.Mock).mockRejectedValue(new Error(errorMessage));
+    const payload = { email: "test@example.com", password: "123456" };
+
+    // Act
+    const response = await request(app).post("/login").send(payload);
+
+    // Assert
+    expect(response.status).toBe(400);
+  });
 });
