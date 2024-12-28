@@ -33,6 +33,7 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
 
     if (!result) {
       res.status(401).json({ message: "Invalid email or password" });
+      return;
     }
     const { user, token } = result;
     res.status(200).json({ user, token });
